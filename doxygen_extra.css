@@ -1,0 +1,14 @@
+code {
+    background: #eaeaea;
+    padding: 0 0.3em;
+    border-radius: 4px;
+}
+div.fragment {
+    padding: 0.5em;
+    border-radius: 4px;
+    margin: 1em 0;
+}
+
+div.line {
+    line-height: 1.4;
+}
