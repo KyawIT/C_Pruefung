@@ -93,6 +93,7 @@ void list_dump(char* prefix, IntList list) {
 }
 
 /* ===================================================================== */
+// Get List
 IntList list_obtain(){
     IntList list = alloc_mem(sizeof(struct IntListData));
     if(list != 0){
@@ -101,6 +102,7 @@ IntList list_obtain(){
     return list;
 }
 
+// Free Memory and clear list
 void list_release(IntList* p_list) {
     if (p_list != 0 && *p_list != 0) {
         list_clear(*p_list);
@@ -109,14 +111,17 @@ void list_release(IntList* p_list) {
     }
 }
 
+// List must contain something
 bool list_is_valid(IntList list) {
     return list != 0;
 }
 
+// If list is not valid or list head is NULL
 bool list_is_empty(IntList list) {
     return !list_is_valid(list) || list->head == 0;
 }
 
+//Release Node by adress and head is NULL
 void list_clear(IntList list) {
     if (list_is_valid(list)) {
         IntNode cur = list->head;
@@ -129,6 +134,7 @@ void list_clear(IntList list) {
     }
 }
 
+// Give the size back
 int list_get_size(IntList list) {
     int count = 0;
     if (list_is_valid(list)) {
@@ -141,10 +147,12 @@ int list_get_size(IntList list) {
     return count;
 }
 
+// Insert at last
 void list_insert(IntList list, int value) {
     list_insert_at(list, UINT_MAX, value);
 }
 
+// Insert at specific point
 void list_insert_at(IntList list, unsigned int index, int value) {
     if (list_is_valid(list)) {
         IntNode node = list_obtain_node(value);
@@ -162,9 +170,10 @@ void list_insert_at(IntList list, unsigned int index, int value) {
                 list->head = node;
             }
         }
-    } /* list_is_valid(list) */
+    } 
 }
 
+// Get at specific point or get default
 static IntNode list_get_at_or_last(IntNode start, unsigned int index, bool acceptLastAsDefault) {
     IntNode cur = start;
     /* search the node at index until end of list */
@@ -175,6 +184,7 @@ static IntNode list_get_at_or_last(IntNode start, unsigned int index, bool accep
     return (acceptLastAsDefault || step == index) ? cur : 0;
 }
 
+// Get at index
 int list_get_at(IntList list, unsigned int index) {
     int value = 0;
     if (list_is_valid(list)) {
@@ -185,6 +195,8 @@ int list_get_at(IntList list, unsigned int index) {
     }
     return value;
 }
+
+// remove next node
 static IntNode list_remove_next(IntList list, IntNode start, int value) {
     IntNode cur = start != 0 ? start : (list_is_valid(list) ? list->head : 0);
     IntNode prev = 0;
@@ -207,10 +219,12 @@ static IntNode list_remove_next(IntList list, IntNode start, int value) {
     return next_start;
 }
 
+// remove the list by value
 void list_remove(IntList list, int value) {
     list_remove_next(list, 0, value);
 }
 
+// Remove the whole list
 void list_remove_all(IntList list, int value) {
     IntNode next_start = list_remove_next(list, 0, value);
     while (next_start != 0) {
@@ -218,6 +232,7 @@ void list_remove_all(IntList list, int value) {
     }
 }
 
+// Remove at index
 int list_remove_at(IntList list, unsigned int index) {
     int removed_value = 0;
     if (list_is_valid(list) && list->head != 0) {
@@ -241,6 +256,7 @@ int list_remove_at(IntList list, unsigned int index) {
     return removed_value;
 }
 
+// Check if it contains something
 bool list_contains(IntList list, int value) {
     IntNode cur = 0;
     if (list_is_valid(list)) {
@@ -252,6 +268,7 @@ bool list_contains(IntList list, int value) {
     return (cur != 0);
 }
 
+// Append list to another list.
 void list_append (IntList list, IntList list_to_append) {
     if (list_is_valid(list) && list_to_append != 0 && list_to_append->head != 0) {
         IntNode last = list_get_at_or_last(list->head, UINT_MAX, true);
